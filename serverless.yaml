@@ -1,5 +1,5 @@
 service:
-  name: serverless-todo-capstone-app
+  name: serverless-capstone
 
 plugins:
   - serverless-webpack
@@ -11,12 +11,12 @@ provider:
   runtime: nodejs10.x
 
   stage: ${opt:stage, 'dev'}
-  region: ${opt:region, 'eu-west-3'}
+  region: ${opt:region, 'us-east-1'}
 
   environment:
-    TODOITEM_TABLE: Todoitem-ali-v6-${self:provider.stage}
+    TODOITEM_TABLE: Todoitem-ali-v134-${self:provider.stage}
     TODOITEM_TABLE_GSI: byUserId
-    TODOITEM_S3_BUCKET_NAME: todoitem-alinada-attachments-2020-${self:provider.stage}
+    TODOITEM_S3_BUCKET_NAME: todoitem-capestone-2020-${self:provider.stage}
     SIGNED_URL_EXPIRATION: 300
 
   tracing:
@@ -118,7 +118,6 @@ functions:
           - xray:PutTraceSegments
         Resource:
           - "*"
-
   DeleteTodo:
     handler: src/lambda/http/deleteTodo.handler
     events:
@@ -232,12 +231,14 @@ resources:
         AttributeDefinitions:
           - AttributeName: userId
             AttributeType: S
+          - AttributeName: createdAt
+            AttributeType: S
           - AttributeName: todoId
             AttributeType: S
         KeySchema:
           - AttributeName: userId
             KeyType: HASH
-          - AttributeName: todoId
+          - AttributeName: createdAt
             KeyType: RANGE
         BillingMode: PAY_PER_REQUEST
         TableName: ${self:provider.environment.TODOITEM_TABLE}
@@ -249,4 +250,4 @@ resources:
               - AttributeName: todoId
                 KeyType: RANGE
             Projection:
-              ProjectionType: ALL
+              ProjectionType: ALL 
