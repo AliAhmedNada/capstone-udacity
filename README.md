@@ -128,3 +128,7 @@ npm install
 sls deploy -v
 ```
 
+
+```
+Postman collection in the repo with name (Udacity C4 Project.postman_collection)
+```
